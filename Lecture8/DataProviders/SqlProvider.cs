@@ -11,19 +11,23 @@ public class SqlProvider : ISqlProvider
     private readonly string _connectionStr;
     public SqlProvider(string connectionStr)
     {
-        _connectionStr = "Server=DESKTOP-IFN84LU\\SQLEXPRESS01;Database=Lab1;Trusted_Connection=True;";
+        _connectionStr = connectionStr;
     }
 
     public IEnumerable<Producer> GetProducers(string defaultDb)
     {
         Logger.Trace("Entering...");
 
+        const string sql = "SELECT * FROM dbo.Producers WHERE Id > @Value";
+        DynamicParameters dp = new();
+        dp.Add("@Value", "5");
+        
         using SqlConnection conn = new (_connectionStr);
         try
         {
             conn.Open();
             conn.ChangeDatabase(defaultDb);
-            IEnumerable<Producer> producers = conn.Query<Producer>("SELECT * FROM dbo.Producers");
+            IEnumerable<Producer> producers = conn.Query<Producer>(sql, dp);
             
             Logger.Trace($"{producers.Count()} producers found");
             return producers;
