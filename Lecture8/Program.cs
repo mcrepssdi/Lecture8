@@ -1,4 +1,5 @@
 ﻿using Lecture8.Configurations;
+using Lecture8.DataProviders;
 using Lecture8.Workers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,9 @@ IHost host = Host.CreateDefaultBuilder(args)
         logger.Info($"DB ConnStr: {config.AppEnvironment.ConnectionStr}");
 
         services.AddSingleton(config);
+        services.AddSingleton<ISqlProvider>(new SqlProvider(config.AppEnvironment.ConnectionStr));
         
+        services.AddHostedService<JoinExample>();
         
         services.AddHostedService<Shutdown>();
     })
