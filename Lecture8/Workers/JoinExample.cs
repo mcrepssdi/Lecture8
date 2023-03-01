@@ -22,7 +22,12 @@ public class JoinExample : BackgroundService
         {
             _logger.Trace($"ID: {p.Id}\tType: {p.Type_Of_Producer}");
         });
-        
+
+        IEnumerable<ProducerJoin> joins = _dataProvider.GetProducersJoin("Lab1");
+        joins.ToList().ForEach(p =>
+        {
+            _logger.Trace($"ID: {p.Id}, Type: {p.Type_Of_Producer}, BID: {p.Bid}, BTYPE: {p.BType}");
+        });
         return Task.CompletedTask;
     }
 }

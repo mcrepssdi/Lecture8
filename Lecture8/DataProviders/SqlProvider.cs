@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using System.Text;
 using Dapper;
 using Lecture8.Models;
 using NLog;
@@ -38,5 +39,33 @@ public class SqlProvider : ISqlProvider
         }
         
         return new List<Producer>();
+    }
+
+    public IEnumerable<ProducerJoin> GetProducersJoin(string defaultDb)
+    {
+        Logger.Trace("Entering...");
+
+        StringBuilder sb = new();
+        sb.AppendLine("SELECT A.*, B.Id AS BID, B.TYPE_OF_PRODUCER AS BTYPE ");
+        sb.AppendLine("FROM dbo.Producers A ");
+        sb.AppendLine("JOIN dbo.Producers_Temp B ");
+        sb.AppendLine("ON A.ID = B.Id ");
+
+        using SqlConnection conn = new (_connectionStr);
+        try
+        {
+            conn.Open();
+            conn.ChangeDatabase(defaultDb);
+            IEnumerable<ProducerJoin> producers = conn.Query<ProducerJoin>(sb.ToString());
+            
+            Logger.Trace($"{producers.Count()} producers found");
+            return producers;
+        }
+        catch (Exception e)
+        {
+            Logger.Error(e.Message);
+        }
+        
+        return new List<ProducerJoin>();
     }
 }
