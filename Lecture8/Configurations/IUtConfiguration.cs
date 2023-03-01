@@ -3,5 +3,5 @@ namespace Lecture8.Configurations;
 
 public class IUtConfiguration
 {
-    public AppEnvironment AppEnvironment;
+    public AppEnvironment AppEnvironment { get; set; }
 }

@@ -7,8 +7,7 @@ public class Shutdown : BackgroundService
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
-
-        
+    
     public Shutdown(IHostApplicationLifetime hostApplicationLifetime)
     {
         _hostApplicationLifetime = hostApplicationLifetime;
