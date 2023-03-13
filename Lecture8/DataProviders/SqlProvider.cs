@@ -159,8 +159,43 @@ public class SqlProvider : ISqlProvider
             conn.Open();
             conn.ChangeDatabase(defaultDb);
             int rows  = conn.Execute(sb.ToString(), dp);
+
+            if (rows > 1)
+            {
+                throw new Exception($"Rows returned is greater than 1.  Rows :{rows}");
+            }
             
             Logger.Trace($"{rows} inserted");
+            return rows;
+        }
+        catch (Exception e)
+        {
+            Logger.Error(e.Message);
+        }
+        
+        return int.MinValue;
+    }
+
+    public int DeleteNewSeriesValue(string defaultDb, string keyValue, double period)
+    {
+        Logger.Trace("Entering...");
+        
+        StringBuilder sb = new();
+        sb.AppendLine("DELETE FROM [dbo].[productivity-statistics-1978-2020-csv] ");
+        sb.AppendLine("WHERE Data_value = @value AND Period = @Period ");
+
+        DynamicParameters dp = new();
+        dp.Add("@value", keyValue);
+        dp.Add("@Period", period);
+
+        using SqlConnection conn = new (_connectionStr);
+        try
+        {
+            conn.Open();
+            conn.ChangeDatabase(defaultDb);
+            int rows  = conn.Execute(sb.ToString(), dp);
+            
+            Logger.Trace($"{rows} deleted");
             return rows;
         }
         catch (Exception e)

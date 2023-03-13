@@ -9,4 +9,5 @@ public interface ISqlProvider
     public IEnumerable<string> DistinctSeries(string defaultDb);
     public IEnumerable<DistinctValues> DistinctValues(string defaultDb);
     public int InsertNewSeriesValue(string defaultDb, Series series);
+    public int DeleteNewSeriesValue(string defaultDb, string keyValue, double period);
 }

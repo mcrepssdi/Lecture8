@@ -46,7 +46,7 @@ public class JoinExample : BackgroundService
         {
             Series_reference = "PRDA.S1CAAZI",
             Period = 1978.03,
-            Data_value = "2250",
+            Data_value = "2550",
             status = "FINAL",
             Units = "Index",
             Magntude = "0",
@@ -61,6 +61,10 @@ public class JoinExample : BackgroundService
         };
         int rows = _dataProvider.InsertNewSeriesValue("Lab1", series);
         _logger.Trace($"Rows Inserted: {rows}");
+        
+        rows = _dataProvider.DeleteNewSeriesValue("Lab1", "2750",  1978.03);
+        _logger.Trace($"Rows Deleted: {rows}");
+        
         return Task.CompletedTask;
     }
     
