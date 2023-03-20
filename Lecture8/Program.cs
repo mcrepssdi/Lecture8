@@ -5,8 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;using NLog;
 
-
-
 IHost host = Host.CreateDefaultBuilder(args)
     //.UseWindowServices()
     .ConfigureServices((hostContext, services) =>
@@ -20,7 +18,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton(config);
         services.AddSingleton<ISqlProvider>(new SqlProvider(config.AppEnvironment.ConnectionStr));
         
-        services.AddHostedService<JoinExample>();
+        //services.AddHostedService<JoinExample>();
+        services.AddHostedService<Lecture9Worker>();
         
         services.AddHostedService<Shutdown>();
     })

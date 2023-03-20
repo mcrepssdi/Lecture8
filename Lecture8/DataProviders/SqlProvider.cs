@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 using Dapper;
 using Lecture8.Models;
@@ -15,6 +16,8 @@ public class SqlProvider : ISqlProvider
         _connectionStr = connectionStr;
     }
 
+    #region Join Work
+    
     public IEnumerable<Producer> GetProducers(string defaultDb)
     {
         Logger.Trace("Entering...");
@@ -205,4 +208,62 @@ public class SqlProvider : ISqlProvider
         
         return int.MinValue;
     }
+    #endregion
+    
+    #region Lecture 9 Worker
+
+        public IEnumerable<EnergyConsumption> EnergyConsumptionView(string defaultDb)
+        {
+            Logger.Trace("Entering...");
+
+            const string sql = "SELECT * FROM dbo.ViewEnergyConsumption";
+            using SqlConnection conn = new (_connectionStr);
+            try
+            {
+                conn.Open();
+                conn.ChangeDatabase(defaultDb);
+                IEnumerable<EnergyConsumption> results = conn.Query<EnergyConsumption>(sql);
+            
+                Logger.Trace($"{results.Count()} producers found");
+                return results;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.Message);
+            }
+        
+            return new List<EnergyConsumption>();
+        }
+
+        public IEnumerable<EnergyConsumption> EnergyConsumptionByState(string defaultDb, string state)
+        {
+            Logger.Trace("Entering...");
+
+            const string sql = "dbo.spEnergyConsumption";
+            DynamicParameters dp = new();
+            dp.Add("@State", state);
+            using SqlConnection conn = new(_connectionStr);
+            try
+            {
+                conn.Open();
+                conn.ChangeDatabase(defaultDb);
+                IEnumerable<EnergyConsumption> results =
+                    conn.Query<EnergyConsumption>(sql, dp, commandType: CommandType.StoredProcedure);
+
+                Logger.Trace($"{results.Count()} producers found");
+                return results;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.Message);
+            }
+
+            return new List<EnergyConsumption>();
+        }
+
+    #endregion
+    
+
+
+
 }
