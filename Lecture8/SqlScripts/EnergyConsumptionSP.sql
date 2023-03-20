@@ -11,7 +11,8 @@ GO
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [dbo].[spEnergyConsumption]
-	@State nvarchar(2)
+	@State nvarchar(2),
+	@Year int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -19,5 +20,5 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-SELECT * FROM dbo.EnergyConsumption WHERE State = @State;
+SELECT * FROM dbo.EnergyConsumption WHERE State = @State AND Year = @Year;
 END

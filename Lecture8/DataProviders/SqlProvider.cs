@@ -242,6 +242,7 @@ public class SqlProvider : ISqlProvider
             const string sql = "dbo.spEnergyConsumption";
             DynamicParameters dp = new();
             dp.Add("@State", inputParams.State);
+            dp.Add("@Year", inputParams.Year);
             using SqlConnection conn = new(_connectionStr);
             try
             {
@@ -250,7 +251,7 @@ public class SqlProvider : ISqlProvider
                 IEnumerable<EnergyConsumption> results =
                     conn.Query<EnergyConsumption>(sql, dp, commandType: CommandType.StoredProcedure);
 
-                Logger.Trace($"{results.Count()} producers found");
+                Logger.Trace($"{results.Count()} records for {inputParams.State}, Year: {inputParams.Year}");
                 return results;
             }
             catch (Exception e)
