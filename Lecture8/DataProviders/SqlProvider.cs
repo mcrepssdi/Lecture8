@@ -235,13 +235,13 @@ public class SqlProvider : ISqlProvider
             return new List<EnergyConsumption>();
         }
 
-        public IEnumerable<EnergyConsumption> EnergyConsumptionByState(string defaultDb, string state)
+        public IEnumerable<EnergyConsumption> EnergyConsumptionByState(string defaultDb, EnergyConsumptionSPInput inputParams)
         {
             Logger.Trace("Entering...");
 
             const string sql = "dbo.spEnergyConsumption";
             DynamicParameters dp = new();
-            dp.Add("@State", state);
+            dp.Add("@State", inputParams.State);
             using SqlConnection conn = new(_connectionStr);
             try
             {

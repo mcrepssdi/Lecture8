@@ -29,15 +29,15 @@ public class Lecture9Worker : BackgroundService
         
         // Calls AK, OH, KY using a stored procedure
         _logger.Trace("Stored Procedure");
-        List<string> states = new List<string>
+        List<EnergyConsumptionSPInput> states = new ()
         {
-            "AK",
-            "OH",
-            "KY"
+            new EnergyConsumptionSPInput (){State = "AK", Year = 2000},
+            new EnergyConsumptionSPInput (){State = "OH", Year = 2002},
+            new EnergyConsumptionSPInput (){State = "KY", Year = 2000},
         };
 
         // Stored procedure logic to loop over the list of states one by one
-        foreach (string s in states)
+        foreach (EnergyConsumptionSPInput s in states)
         {
             IEnumerable<EnergyConsumption> res = _dataProvider.EnergyConsumptionByState("Lab1", s);
             res.ToList().ForEach(p =>

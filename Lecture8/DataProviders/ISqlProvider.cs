@@ -11,5 +11,5 @@ public interface ISqlProvider
     public int InsertNewSeriesValue(string defaultDb, Series series);
     public int DeleteNewSeriesValue(string defaultDb, string keyValue, double period);
     public IEnumerable<EnergyConsumption> EnergyConsumptionView(string defaultDb);
-    public IEnumerable<EnergyConsumption> EnergyConsumptionByState(string defaultDb, string state);
+    public IEnumerable<EnergyConsumption> EnergyConsumptionByState(string defaultDb, EnergyConsumptionSPInput inputParams);
 } 
